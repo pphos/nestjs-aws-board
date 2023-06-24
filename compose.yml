@@ -1,0 +1,18 @@
+services:
+  nest-aws:
+    build:
+      context: .
+    user: node
+    ports:
+      - 3000:3000
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_SESSION_TOKEN
+    tty: true
+    volumes:
+      # Forwards the local Docker socket to the container.
+      - /var/run/docker.sock:/var/run/docker-host.sock
+      - .:/home/node/workspace:cached
+      - ~/.aws/:/home/node/.aws
+    working_dir: /home/node/workspace
