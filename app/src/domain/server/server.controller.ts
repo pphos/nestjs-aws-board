@@ -3,8 +3,6 @@ import {
   Controller,
   Get,
   Post,
-  Put,
-  Delete,
   BadRequestException,
   Res,
 } from '@nestjs/common';
@@ -14,10 +12,12 @@ import { EC2Client } from '@aws-sdk/client-ec2';
 import { IndexService } from './services/index.service';
 import { StoreService } from './services/store.service';
 import { DestroyService } from './services/destroy.service';
+import { UpdateStatusService } from './services/update-status.service';
 import { EditService } from './services/edit.service';
 import { StoreServerDTO } from './dto/store-server.dto';
 import { EditServerDTO } from './dto/edit-server.dto';
 import { DestroyServerDTO } from './dto/destroy-server.dto';
+import { UpdateStatusServerDTO } from './dto/update-status-server.dto';
 
 @Controller('server')
 export class ServerController {
@@ -28,6 +28,7 @@ export class ServerController {
     private readonly storeService: StoreService,
     private readonly destroyService: DestroyService,
     private readonly editService: EditService,
+    private readonly updateStatusService: UpdateStatusService,
   ) {
     this.ec2Client = new EC2Client({});
   }
@@ -37,11 +38,16 @@ export class ServerController {
     try {
       const response = await this.indexService.invoke(this.ec2Client);
       const instances = response.map((instance) => {
+        const status = instance.Status;
+        const controlText = status === 'running' ? '停止' : '起動';
+
         return {
           name: instance.Name,
           instanceId: instance.InstanceId,
+          status: instance.Status,
           instanceType: instance.InstanceType,
           ipAddress: instance.PrivateIpAddress,
+          controlText: controlText,
         };
       });
 
@@ -52,27 +58,74 @@ export class ServerController {
     }
   }
 
+  @Get('create')
+  async create(@Res() res: Response) {
+    return res.render('server/create');
+  }
+
   @Post()
-  async store(@Body() storeServerDTO: StoreServerDTO) {
+  async store(@Res() res: Response, @Body() storeServerDTO: StoreServerDTO) {
     try {
       await this.storeService.invoke(this.ec2Client, storeServerDTO);
+      return res.redirect('/server');
     } catch (error) {
       console.error(error);
       throw new BadRequestException(error.message);
     }
   }
 
-  @Delete()
-  async destroy(@Body() destroyServerDTO: DestroyServerDTO) {
+  @Post('_updateStatus')
+  async updateStatus(
+    @Res() res: Response,
+    @Body() updateStatusServerDTO: UpdateStatusServerDTO,
+  ) {
+    try {
+      await this.updateStatusService.invoke(
+        this.ec2Client,
+        updateStatusServerDTO,
+      );
+      return res.redirect('/server');
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Post('/_destroy')
+  async destroy(
+    @Res() res: Response,
+    @Body() destroyServerDTO: DestroyServerDTO,
+  ) {
     try {
       await this.destroyService.invoke(this.ec2Client, destroyServerDTO);
+      return res.redirect('/server');
     } catch (error) {
       console.error(error);
       throw new BadRequestException(error.message);
     }
   }
 
-  @Put('/edit')
+  @Get('/edit')
+  async edit(@Res() res: Response) {
+    try {
+      const response = await this.editService.invoke(this.ec2Client);
+      const instances = response.map((instance) => {
+        return {
+          name: instance.Name,
+          instanceId: instance.InstanceId,
+          status: instance.Status,
+          instanceType: instance.InstanceType,
+        };
+      });
+
+      return res.render('server/edit', { instances: instances });
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException(error.message);
+    }
+  }
+  /*
+  @POST('/edit')
   async edit(@Body() editServerDTO: EditServerDTO) {
     try {
       await this.editService.invoke(this.ec2Client, editServerDTO);
@@ -81,4 +134,5 @@ export class ServerController {
       throw new BadRequestException(error.message);
     }
   }
+  */
 }

@@ -1,0 +1,40 @@
+{{#> app}}
+{{#*inline "content"}}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">InstanceId</th>
+      <th scope="col">Status</th>
+      <th scope="col">Current InstanceType</th>
+      <th scope="col">Next InstanceType</th>
+      <th scope="col">Controll</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each instances}}
+    <tr>
+      <th scope="row">1</th>
+      <td>{{this.name}}</td>
+      <td>{{this.instanceId}}</td>
+      <td>{{this.status}}</td>
+      <td>{{this.instanceType}}</td>
+      <td>
+        <select class="form-select" name="instanceType">
+          <option selected>Select next instance type.</option>
+          <option value="t3.micro">t3.micro</option>
+          <option value="t3.small">t3.small</option>
+        </select>
+      </td>
+      <td>
+        <form method="POST" action="#">
+          <button type="submit" class="btn btn-outline-primary">更新</button>
+        </form>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+{{/inline}}
+{{/app}}

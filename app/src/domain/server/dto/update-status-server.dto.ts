@@ -1,11 +1,11 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class EditServerDTO {
+export class UpdateStatusServerDTO {
   @IsNotEmpty()
   @IsString()
   instanceId: string;
 
   @IsNotEmpty()
   @IsString()
-  name: string;
+  status: string;
 }

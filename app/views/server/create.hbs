@@ -1,5 +1,23 @@
 {{#> app}}
-  {{#*inline "content"}}
-    <h1>Hello</h1>
-  {{/inline}}
+{{#*inline "content"}}
+<form method="POST" action="/server">
+  <div class="mb-3">
+    <label for="name" class="form-label">名前</label>
+    <input type="text" class="form-control" name="name" id="name" placeholder="サーバ名を入力してください">
+  </div>
+  <div class="mb-3">
+    <label for="instanceType" class="form-label">インスタンスタイプ</label>
+    <select class="form-select" name="instanceType">
+      <option selected>インスタンスタイプを選択してください</option>
+      <option value="t3.micro">t3.micro</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label for="volumeSize" class="form-label">ボリュームサイズ</label>
+    <input class="form-control" name="volumeSize" id="volumeSize" placeholder="ボリュームサイズを入力してください"/>
+  </div>
+  <button type="submit" class="btn btn-primary">作成</button>
+</form>
+</div>
+{{/inline}}
 {{/app}}

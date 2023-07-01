@@ -6,8 +6,11 @@
       <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">InstanceId</th>
+      <th scope="col">Status</th>
+      <th scope="col">Controll</th>
       <th scope="col">InstanceType</th>
       <th scope="col">IP address</th>
+      <th scope="col">Terminate</th>
     </tr>
   </thead>
   <tbody>
@@ -16,8 +19,23 @@
       <th scope="row">1</th>
       <td>{{this.name}}</td>
       <td>{{this.instanceId}}</td>
+      <td>{{this.status}}</td>
+      <td>
+        <form method="POST" action="/server/_updateStatus">
+          <input type="text" class="form-control" name="instanceId" value={{this.instanceId}} hidden>
+          <input type="text" class="form-control" name="status" value={{this.status}} hidden>
+          <button type="submit" class="btn btn-outline-primary">{{this.controlText}}</button>
+        </form>
+      </td>
       <td>{{this.instanceType}}</td>
       <td>{{this.ipAddress}}</td>
+      <td>
+        <form method="POST" action="/server/_destroy">
+          <input type="text" class="form-control" name="instanceId" value={{this.instanceId}} hidden>
+          <input type="hidden" name="_method" value="DELETE">
+          <button type="submit" class="btn btn-outline-danger">削除</button>
+        </form>
+      </td>
     </tr>
     {{/each}}
   </tbody>

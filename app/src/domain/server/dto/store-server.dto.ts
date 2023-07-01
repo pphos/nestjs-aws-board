@@ -12,8 +12,4 @@ export class StoreServerDTO {
   @IsNotEmpty()
   @IsNumberString()
   volumeSize: number;
-
-  @IsNotEmpty()
-  @IsString()
-  iamInstanceProfileName: string;
 }
