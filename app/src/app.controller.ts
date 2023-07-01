@@ -11,9 +11,6 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    const hoge = this.configService.get<string>('HOGE');
-    console.log(hoge);
-
     return 'Hello';
   }
 }

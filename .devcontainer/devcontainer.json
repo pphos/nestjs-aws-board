@@ -33,7 +33,8 @@
         "MariusAlchimavicius.json-to-ts",
         "stylelint.vscode-stylelint",
         "formulahendry.auto-rename-tag",
-        "oderwat.indent-rainbow"
+        "oderwat.indent-rainbow",
+        "Orta.vscode-jest"
       ]
     }
   }

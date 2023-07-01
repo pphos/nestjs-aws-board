@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/node:18.16.0
+FROM public.ecr.aws/docker/library/node:18.16.1
 
 RUN apt-get update && apt-get install -y \
   git \
