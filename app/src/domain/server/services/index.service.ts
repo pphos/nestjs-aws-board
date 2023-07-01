@@ -18,6 +18,7 @@ export class IndexService {
 
     const result = instances.map((instance: Instance) => {
       return {
+        Name: instance.Tags[0].Value,
         InstanceId: instance.InstanceId,
         IamInstanceProfile: instance.IamInstanceProfile.Arn,
         ImageId: instance.ImageId,

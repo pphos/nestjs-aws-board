@@ -1,0 +1,26 @@
+{{#> app}}
+{{#*inline "content"}}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">InstanceId</th>
+      <th scope="col">InstanceType</th>
+      <th scope="col">IP address</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each instances}}
+    <tr>
+      <th scope="row">1</th>
+      <td>{{this.name}}</td>
+      <td>{{this.instanceId}}</td>
+      <td>{{this.instanceType}}</td>
+      <td>{{this.ipAddress}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+{{/inline}}
+{{/app}}

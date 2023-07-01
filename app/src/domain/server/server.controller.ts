@@ -6,7 +6,9 @@ import {
   Put,
   Delete,
   BadRequestException,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { EC2Client } from '@aws-sdk/client-ec2';
 
 import { IndexService } from './services/index.service';
@@ -31,10 +33,19 @@ export class ServerController {
   }
 
   @Get()
-  async index() {
+  async index(@Res() res: Response) {
     try {
       const response = await this.indexService.invoke(this.ec2Client);
-      return response;
+      const instances = response.map((instance) => {
+        return {
+          name: instance.Name,
+          instanceId: instance.InstanceId,
+          instanceType: instance.InstanceType,
+          ipAddress: instance.PrivateIpAddress,
+        };
+      });
+
+      return res.render('server/index', { instances: instances });
     } catch (error) {
       console.error(error);
       throw new BadRequestException(error.message);
