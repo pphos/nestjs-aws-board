@@ -14,4 +14,10 @@ export class AppController {
   root() {
     return;
   }
+
+  @Get()
+  @Render('errors/error')
+  error() {
+    return;
+  }
 }

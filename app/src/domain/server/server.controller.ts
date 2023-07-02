@@ -6,10 +6,17 @@ import {
   BadRequestException,
   Res,
   Param,
-  Query,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { EC2Client } from '@aws-sdk/client-ec2';
+import {
+  EC2Client,
+  DescribeInstancesCommand,
+  DescribeInstancesCommandInput,
+  Instance,
+  Reservation
+} from '@aws-sdk/client-ec2';
 
 import { IndexService } from './services/index.service';
 import { StoreService } from './services/store.service';
