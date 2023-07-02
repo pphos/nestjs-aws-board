@@ -3,12 +3,12 @@
 <form method="POST" action="/server">
   <div class="mb-3">
     <label for="name" class="form-label">名前</label>
-    <input type="text" class="form-control" name="name" id="name" placeholder="サーバ名を入力してください">
+    <input type="text" class="form-control" name="name" id="name" value="{{storeServerDTO.name}}" placeholder="サーバ名を入力してください">
   </div>
   <div class="mb-3">
     <label for="instanceType" class="form-label">インスタンスタイプ</label>
     <select class="form-select" name="instanceType">
-      <option selected>インスタンスタイプを選択してください</option>
+      <option hidden>インスタンスタイプを選択してください</option>
       <option value="t3.micro">t3.micro</option>
     </select>
   </div>

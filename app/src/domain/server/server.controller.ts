@@ -6,17 +6,9 @@ import {
   BadRequestException,
   Res,
   Param,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
-import {
-  EC2Client,
-  DescribeInstancesCommand,
-  DescribeInstancesCommandInput,
-  Instance,
-  Reservation
-} from '@aws-sdk/client-ec2';
+import { EC2Client } from '@aws-sdk/client-ec2';
 
 import { IndexService } from './services/index.service';
 import { StoreService } from './services/store.service';
@@ -28,6 +20,8 @@ import { UpdateServerDTO, UpdateServerQueryDTO } from './dto/update-server.dto';
 import { DestroyServerDTO } from './dto/destroy-server.dto';
 import { UpdateStatusServerDTO } from './dto/update-status-server.dto';
 import { UpdateService } from './services/update.service';
+import { validate } from 'class-validator';
+import { plainToClass } from 'class-transformer';
 
 @Controller('server')
 export class ServerController {
@@ -65,7 +59,7 @@ export class ServerController {
       return res.render('server/index', { instances: instances });
     } catch (error) {
       console.error(error);
-      throw new BadRequestException(error.message);
+      throw error;
     }
   }
 
@@ -77,11 +71,23 @@ export class ServerController {
   @Post()
   async store(@Res() res: Response, @Body() storeServerDTO: StoreServerDTO) {
     try {
-      await this.storeService.invoke(this.ec2Client, storeServerDTO);
+      const errors = await validate(
+        plainToClass(StoreServerDTO, storeServerDTO),
+      );
+      if (errors.length > 0) {
+        console.error(errors);
+        const messages = errors.flatMap((error) =>
+          Object.values(error.constraints),
+        );
+        console.log(messages);
+        // 選択リストの表示の初期入力値は少しめんどくさい
+        return res.render('server/create', { storeServerDTO });
+      }
+      //await this.storeService.invoke(this.ec2Client, storeServerDTO);
       return res.redirect('/server');
     } catch (error) {
       console.error(error);
-      throw new BadRequestException(error.message);
+      throw error;
     }
   }
 
@@ -98,7 +104,7 @@ export class ServerController {
       return res.redirect('/server');
     } catch (error) {
       console.error(error);
-      throw new BadRequestException(error.message);
+      throw error;
     }
   }
 
@@ -112,7 +118,7 @@ export class ServerController {
       return res.redirect('/server');
     } catch (error) {
       console.error(error);
-      throw new BadRequestException(error.message);
+      throw error;
     }
   }
 
@@ -132,7 +138,7 @@ export class ServerController {
       return res.render('server/edit', { instances: instances });
     } catch (error) {
       console.error(error);
-      throw new BadRequestException(error.message);
+      throw error;
     }
   }
 
@@ -151,7 +157,7 @@ export class ServerController {
       return res.redirect('/server/edit');
     } catch (error) {
       console.error(error);
-      throw new BadRequestException(error.message);
+      throw error;
     }
   }
 }
