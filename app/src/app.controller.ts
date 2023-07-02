@@ -1,23 +1,10 @@
-import { Controller, Get, Render } from '@nestjs/common';
-import { AppService } from './app.service';
-import { ConfigService } from '@nestjs/config';
+import { Controller, Get, Res } from '@nestjs/common';
+import { Response } from 'express';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-    private readonly configService: ConfigService,
-  ) {}
-
   @Get()
-  @Render('server/index')
-  root() {
-    return;
-  }
-
-  @Get()
-  @Render('errors/error')
-  error() {
-    return;
+  root(@Res() res: Response) {
+    return res.redirect('/server');
   }
 }
