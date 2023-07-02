@@ -15,23 +15,23 @@
   <tbody>
     {{#each instances}}
     <tr>
-      <th scope="row">1</th>
-      <td>{{this.name}}</td>
-      <td>{{this.instanceId}}</td>
-      <td>{{this.status}}</td>
-      <td>{{this.instanceType}}</td>
-      <td>
-        <select class="form-select" name="instanceType">
-          <option selected>Select next instance type.</option>
-          <option value="t3.micro">t3.micro</option>
-          <option value="t3.small">t3.small</option>
-        </select>
-      </td>
-      <td>
-        <form method="POST" action="#">
+      <form method="POST" action="/server/{{this.instanceId}}">
+        <th scope="row">1</th>
+        <td>{{this.name}}</td>
+        <td>{{this.instanceId}}</td>
+        <td>{{this.status}}</td>
+        <td>{{this.instanceType}}</td>
+        <td>
+          <select class="form-select" name="instanceType">
+            <option selected>Select next instance type.</option>
+            <option value="t3.micro">t3.micro</option>
+            <option value="t3.small">t3.small</option>
+          </select>
+        </td>
+        <td>
           <button type="submit" class="btn btn-outline-primary">更新</button>
-        </form>
-      </td>
+        </td>
+      </form>
     </tr>
     {{/each}}
   </tbody>

@@ -5,6 +5,8 @@ import {
   Post,
   BadRequestException,
   Res,
+  Param,
+  Query,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { EC2Client } from '@aws-sdk/client-ec2';
@@ -15,9 +17,10 @@ import { DestroyService } from './services/destroy.service';
 import { UpdateStatusService } from './services/update-status.service';
 import { EditService } from './services/edit.service';
 import { StoreServerDTO } from './dto/store-server.dto';
-import { EditServerDTO } from './dto/edit-server.dto';
+import { UpdateServerDTO, UpdateServerQueryDTO } from './dto/update-server.dto';
 import { DestroyServerDTO } from './dto/destroy-server.dto';
 import { UpdateStatusServerDTO } from './dto/update-status-server.dto';
+import { UpdateService } from './services/update.service';
 
 @Controller('server')
 export class ServerController {
@@ -28,6 +31,7 @@ export class ServerController {
     private readonly storeService: StoreService,
     private readonly destroyService: DestroyService,
     private readonly editService: EditService,
+    private readonly updateService: UpdateService,
     private readonly updateStatusService: UpdateStatusService,
   ) {
     this.ec2Client = new EC2Client({});
@@ -124,15 +128,23 @@ export class ServerController {
       throw new BadRequestException(error.message);
     }
   }
-  /*
-  @POST('/edit')
-  async edit(@Body() editServerDTO: EditServerDTO) {
+
+  @Post('/:instanceId')
+  async update(
+    @Res() res: Response,
+    @Param() queryParams: UpdateServerQueryDTO,
+    @Body() updateServerDTO: UpdateServerDTO,
+  ) {
     try {
-      await this.editService.invoke(this.ec2Client, editServerDTO);
+      await this.updateService.invoke(
+        this.ec2Client,
+        queryParams.instanceId,
+        updateServerDTO,
+      );
+      return res.redirect('/server/edit');
     } catch (error) {
       console.error(error);
       throw new BadRequestException(error.message);
     }
   }
-  */
 }

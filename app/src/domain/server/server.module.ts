@@ -4,6 +4,7 @@ import { IndexService } from './services/index.service';
 import { StoreService } from './services/store.service';
 import { DestroyService } from './services/destroy.service';
 import { EditService } from './services/edit.service';
+import { UpdateService } from './services/update.service';
 import { UpdateStatusService } from './services/update-status.service';
 
 @Module({
@@ -13,6 +14,7 @@ import { UpdateStatusService } from './services/update-status.service';
     StoreService,
     DestroyService,
     EditService,
+    UpdateService,
     UpdateStatusService,
   ],
 })
